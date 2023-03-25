@@ -11,10 +11,15 @@ class Customer {
   String? name;
 
   //this is a responsibility
-  void StoreCustomer(String customerName) {}
+  void storeCustomer(String customerName) {
+    log("store customer :  $customerName");
+  }
 
   //this is another responsibility
-  void generateCustomerReport(String customerName){}
+  void generateCustomerReport(String customerName) {
+    log("generate report for customer : $customerName");
+
+  }
 }
 ```
 
@@ -27,14 +32,20 @@ So finally the refactored code will be described as below :
 
 ```dart
 class Customer {
-  String? name;
+  String name;
+
+  Customer({required this.name});
 }
 
 class CustomerDB {
-  void StoreCustomer(String customerName) {}
+  void storeCustomer(String customerName) {
+    log("store customer :  $customerName");
+  }
 }
 
 class CustomerReportGenerator {
-  void generateCustomerReport(String customerName) {}
+  void generateCustomerReport(String customerName) {
+    log("generate report for customer : $customerName");
+  }
 }
 ```
