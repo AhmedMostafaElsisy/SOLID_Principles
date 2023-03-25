@@ -1,115 +1,80 @@
-## Liskov Substitution Principle:
 
-The Liskov Substitution principle was introduced by Barbara Liskov in her conference
-keynote "Data abstraction" in 1987.Barbara Liskov and Jeannette Wing formulated
-the principle succinctly in a 1994 paper as follows:
+## Interface Segregation Principle :
 
->Let φ(x) be a property provable about objects x of type T. Then φ(y) should be true for objects y of type S where S is a subtype of T.
+>A Client should not be forced to implement an interface that it doesn't use.
 
+This rule means that we should break our interfaces in many smaller ones,
+so they better satisfy the exact needs of our clients.
 
-The human-readable version repeats pretty much everything that Bertrand Meyer
-already has said, but it relies totally on a type-system:
+Similar to the Single Responsibility Principle, the goal of the Interface Segregation Principle is to minimize the side consequences and repetition by dividing the software into multiple, independent parts.
 
-
->1. Preconditions cannot be strengthened in a subtype.
->2. Postconditions cannot be weakened in a subtype.
->3. Invariants of the supertype must be preserved in a subtype.
-
-Robert Martin made the definition sound more smoothly and concisely in 1996 :
-
->Functions that use pointers of references to base classes must be able to use objects of derived classes without knowing it.
-
-Or simply : Subclass/derived class should be substitutable for their base/parent class.
-
-It states that any implementation of an abstraction (interface) should be
-substitutable in any place that the abstraction is accepted. Basically,
-it takes care that while coding using interfaces in our code,
-we not only have a contract of input that the interface receives but also the
-output returned by different Classes implementing that interface; they should be
-of the same type.
-
-A code snippet to show how violates LSP and how we can fix it :
+Let’s see an example :
 
 ```dart
-class Rectangle {
-  double? _height;
-  double? _width;
+import 'dart:developer';
 
-  Rectangle([
-    this._width,
-    this._height,
-  ]);
+abstract class WorkerInterface {
+  void work();
 
-  set width(double width) {
-    _width = width;
+  void sleep();
+}
+
+class HumanWorker implements WorkerInterface {
+  @override
+  void work() {
+    log('works');
   }
 
-  set height(double height) {
-    _height = height;
-  }
-
-  double calcArea() {
-    return _width! * _height!;
+  @override
+  void sleep() {
+    log('sleep');
   }
 }
 
-class Square extends Rectangle {
+class RobotWorker implements WorkerInterface {
   @override
-  set width(double width) {
-    super.width = width;
-    super.height = width;
+  void work() {
+    log('works');
   }
 
   @override
-  set height(double height) {
-    super.width = height;
-    super.height = height;
+  void sleep() {
+    throw Exception("robot don't sleep");
   }
 }
 
 
 ```
 
-we can fix it as following:
+In the above code, RobotWorker no needs sleep, but the class has to implement the sleep method because we know that all methods are abstract in the interface. It breaks the Interface segregation law. How we can fix it please see the following code :
 
 ```dart
-abstract class Shape {
-  double calcArea();
+import 'dart:developer';
+
+abstract class WorkAbleInterface {
+  void work();
 }
 
-class Rectangle implements Shape {
-  double _height;
-  double _width;
+abstract class SleepAbleInterface {
+  void sleep();
+}
 
-
-  Rectangle(this._height, this._width);
-
-  set width(double width) {
-    _width = width;
-  }
-
-  set height(double height) {
-    _height = height;
+class HumanWorker implements WorkAbleInterface, SleepAbleInterface {
+  @override
+  void work() {
+    log('human works');
   }
 
   @override
-  double calcArea() {
-    return _width * _height;
+  void sleep() {
+    log('human sleep');
   }
 }
 
-class Square implements Shape {
-  double _side;
-
-  set side(double side) => _side = side;
-
-
-
-  Square(this._side);
-
+class RobotWorker implements WorkAbleInterface {
   @override
-  double calcArea() {
-    return _side * _side;
+  void work() {
+    log('robot works');
   }
 }
 
