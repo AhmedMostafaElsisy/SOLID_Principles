@@ -1,16 +1,19 @@
-# solid_principles
+# SOLID-Principles
 
-A new Flutter project.
+SOLID Principles is a coding standard that all developers should have a clear
+concept for developing software in a proper way to avoid a bad design.
+It was promoted by Robert C Martin and is used across the object-oriented design spectrum.
+When applied properly it makes your code more extendable, logical and easier to read.
 
-## Getting Started
+When the developer builds a software follow the bad design, the code can become
+inflexible and more brittle, small changes in the software can result in bugs.
+For these reasons, we should follow SOLID Principles.
 
-This project is a starting point for a Flutter application.
+It takes some time to understand, but if you write code following the principles
+it will improve code quality and will help to understand the most well-designed software.
 
-A few resources to get you started if this is your first Flutter project:
+To understand SOLID principles, you have to know the use of the interface clearly.
+If your concept is not clear about interface then you can read this [doc](https://medium.com/@ankitgg66/being-solid-in-dart-1933037168ae).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I'm going to try to explain SOLID Principles in simplest way so that it's easy
+for beginners to understand. Let's go through each principle one by one:
