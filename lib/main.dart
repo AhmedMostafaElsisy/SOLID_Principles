@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'interface_segregation/parking_example/parking_solution.dart';
-import 'interface_segregation/worker_example/worker_solution.dart';
+import 'dependency inversion/database_example/database_solution.dart';
+import 'dependency inversion/delivery_example/delivery_solution.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Interface Segregation '),
+      home: const MyHomePage(title: 'Dependency Inversion '),
     );
   }
 }
@@ -32,17 +32,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _workerExample() {
-    HumanWorker humanWorker = HumanWorker();
-    humanWorker.sleep();
-    humanWorker.work();
-    RobotWorker robotWorker = RobotWorker();
-    robotWorker.work();
+  _dataBaseExample() {
+    PasswordReminder passwordReminder = PasswordReminder(DbConnection());
   }
 
-  _parkingExample() {
-    FreeParking freeParking =FreeParking();
-    freeParking.parkCar();
+  _deliveryExample() {
+    DeliveryCompany company = DeliveryCompany(DeliveryDriver());
+    company.sendProduct(Product());
   }
 
   @override
@@ -57,17 +53,17 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
                 onPressed: () {
-                  _workerExample();
+                  _dataBaseExample();
                 },
-                child: const Text("Worker Example")),
+                child: const Text("DataBase Example")),
             const SizedBox(
               height: 24,
             ),
             ElevatedButton(
                 onPressed: () {
-                  _parkingExample();
+                  _deliveryExample();
                 },
-                child: const Text("Parking Example")),
+                child: const Text("Delivery Example")),
           ],
         ),
       ),

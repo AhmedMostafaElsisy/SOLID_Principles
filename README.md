@@ -1,82 +1,71 @@
 
-## Interface Segregation Principle :
+## Dependency Inversion Principle :
 
->A Client should not be forced to implement an interface that it doesn't use.
+> High-level modules should not depend on low-level modules. Both should depend on abstractions.
 
-This rule means that we should break our interfaces in many smaller ones,
-so they better satisfy the exact needs of our clients.
+> Abstractions should not depend on details. Details should depend on abstractions.
 
-Similar to the Single Responsibility Principle, the goal of the Interface Segregation Principle is to minimize the side consequences and repetition by dividing the software into multiple, independent parts.
+Or simply : Depend on Abstractions not on concretions
 
-Let’s see an example :
+By applying the Dependency Inversion the modules can be easily changed by other modules just
+changing the dependency module and High-level module will not be affected by any changes to
+the Low-level module.
+
+Please look at the following code :
 
 ```dart
 import 'dart:developer';
 
-abstract class WorkerInterface {
-  void work();
-
-  void sleep();
-}
-
-class HumanWorker implements WorkerInterface {
-  @override
-  void work() {
-    log('works');
-  }
-
-  @override
-  void sleep() {
-    log('sleep');
+class MySQLConnection {
+  /// db connection
+  void connect() {
+    log('MYSQL Connection');
   }
 }
 
-class RobotWorker implements WorkerInterface {
-  @override
-  void work() {
-    log('works');
-  }
+class PasswordReminder {
+  late MySQLConnection dbConnection;
 
+  PasswordReminder(this.dbConnection);
+}
+
+```
+
+There's a common misunderstanding that dependency inversion is simply another way to say dependency injection. However, the two are not the same.
+
+In the above code In spite of Injecting MySQLConnection class in PasswordReminder class but it depends on MySQLConnection.
+
+High-level module PasswordReminder should not depend on low-level module MySQLConnection.
+
+If we want to change the connection from MySQLConnection to MongoDBConnection, we have to change hard-coded constructor injection in PasswordReminder class.
+
+PasswordReminder class should depend upon on Abstractions, not on concretions. But How can we do it? Please see the following example :
+
+```dart
+import 'dart:developer';
+
+abstract class ConnectionInterface {
+  void connect();
+}
+
+class DbConnection implements ConnectionInterface {
+  /// db connection
   @override
-  void sleep() {
-    throw Exception("robot don't sleep");
+  void connect() {
+    log('MYSQL Connection');
+  }
+}
+
+class PasswordReminder {
+  /// @var DBConnection
+  late ConnectionInterface dbConnection;
+
+  PasswordReminder(this.dbConnection) {
+    dbConnection.connect();
   }
 }
 
 
 ```
 
-In the above code, RobotWorker no needs sleep, but the class has to implement the sleep method because we know that all methods are abstract in the interface. It breaks the Interface segregation law. How we can fix it please see the following code :
-
-```dart
-import 'dart:developer';
-
-abstract class WorkAbleInterface {
-  void work();
-}
-
-abstract class SleepAbleInterface {
-  void sleep();
-}
-
-class HumanWorker implements WorkAbleInterface, SleepAbleInterface {
-  @override
-  void work() {
-    log('human works');
-  }
-
-  @override
-  void sleep() {
-    log('human sleep');
-  }
-}
-
-class RobotWorker implements WorkAbleInterface {
-  @override
-  void work() {
-    log('robot works');
-  }
-}
-
-
-```
+In the above code, we want to change the connection from MySQLConnection to MongoDBConnection, we no need to change constructor injection in PasswordReminder class. Because here PasswordReminder class depends upon on Abstractions, not on concretions.
