@@ -1,16 +1,40 @@
-# solid_principles
+## Single Responsibility Principle:
 
-A new Flutter project.
+>A class should have one, and only one, reason to change.
 
-## Getting Started
+One class should only serve one purpose, this does not imply that each class should have only one method but they should all relate directly to the responsibility of the class. All the methods and properties should all work towards the same goal. When a class serves multiple purposes or responsibility then it should be made into a new class.
 
-This project is a starting point for a Flutter application.
+Please look at the following code :
 
-A few resources to get you started if this is your first Flutter project:
+```dart
+class Customer {
+  String? name;
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  //this is a responsibility
+  void StoreCustomer(String customerName) {}
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  //this is another responsibility
+  void generateCustomerReport(String customerName){}
+}
+```
+
+Above class violates single responsibility principle. Why should this class store data in database? It is related to the
+persistence layer. The persistence layer deals with persisting is model class.So it is not the responsibility of this class.
+
+Next method generateCustomerReport is also not the responsibility of this class. Because we may need report.
+
+So finally the refactored code will be described as below :
+
+```dart
+class Customer {
+  String? name;
+}
+
+class CustomerDB {
+  void StoreCustomer(String customerName) {}
+}
+
+class CustomerReportGenerator {
+  void generateCustomerReport(String customerName) {}
+}
+```
